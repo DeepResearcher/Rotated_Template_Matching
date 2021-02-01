@@ -60,6 +60,7 @@ def find_template(gray_img,template_org):
     template = rotate_image(template,angle)
     result,loc,y,x = MatchTemplate(gray_img, template)
     
+    # this print the best rotated matched value and the angle...
     print("Best matches is",max(result_indices,key=lambda item:item[0]), "Location on Map=", (y,x))
 
     return result,loc
