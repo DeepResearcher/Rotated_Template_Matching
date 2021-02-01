@@ -2,20 +2,15 @@
 import cv2
 import numpy as np
 
+# Path
 star_map = ("Star Map Path.....")
 template_path = ("template path....")
 
-img = cv2.imread("Star_map.png")
+img = cv2.imread(star_map)
 gray_img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
-template_org = cv2.imread("rotated.png", cv2.IMREAD_GRAYSCALE)
+template_org = cv2.imread(template_path, cv2.IMREAD_GRAYSCALE)
 w, h = template_org.shape[::-1]
 
-
-def rotate_image(image, angle):
-  image_center = tuple(np.array(image.shape[1::-1]) / 2)
-  rot_mat = cv2.getRotationMatrix2D(image_center, angle, 1.0)
-  result = cv2.warpAffine(image, rot_mat, image.shape[1::-1], flags=cv2.INTER_LINEAR)
-  return result
 
 ## Treshold value = 0.6
 def MatchTemplate(im1,im2):
@@ -24,14 +19,14 @@ def MatchTemplate(im1,im2):
     y,x = np.unravel_index(result.argmax(), result.shape)
     return result,loc,y,x
 
-
+# Image rotation
 def rotate_image(image, angle):
   image_center = tuple(np.array(image.shape[1::-1]) / 2)
   rot_mat = cv2.getRotationMatrix2D(image_center, angle, 1.0)
   result = cv2.warpAffine(image, rot_mat, image.shape[1::-1], flags=cv2.INTER_LINEAR)
   return result
 
-
+# plot founded matches on star map
 def plot_matches(img,loc):
     for pt in zip(*loc[::-1]):
         cv2.rectangle(img, pt, (pt[0] + w, pt[1] + h), (0, 255, 0), 2)
@@ -42,7 +37,7 @@ def plot_matches(img,loc):
     cv2.destroyAllWindows()
 
 
-
+# Find the template on star map
 def find_template(gray_img,template_org):
 
     result_indices = []
@@ -71,7 +66,7 @@ def find_template(gray_img,template_org):
 
 
 
-
+# This script return location the best template matches
 result,loc = find_template(gray_img,template_org)
 
 plot_matches(img,loc)
